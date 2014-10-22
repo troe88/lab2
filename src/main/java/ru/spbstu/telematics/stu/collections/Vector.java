@@ -2,7 +2,7 @@ package ru.spbstu.telematics.stu.collections;
 
 import java.util.Iterator;
 
-public class Vector<E> implements IVector, Iterable<Object> {
+public class Vector implements IVector, Iterable<Object> {
 
 	protected Object[] data; // массив для хранения элементов
 
@@ -47,10 +47,26 @@ public class Vector<E> implements IVector, Iterable<Object> {
     	}
     }
     
+    private class Itr implements Iterator<Object>{
+    	private int curInd = 0;
+
+		@Override
+		public boolean hasNext() {
+			if((curInd + 1) <= dataCount)
+				return true;
+			return false;
+		}
+
+		@Override
+		public Object next() {
+			return data[curInd++];
+		}
+    	
+    };
+    
 	@Override
 	public Iterator<Object> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Itr();
 	}
 
 	@Override
@@ -64,18 +80,21 @@ public class Vector<E> implements IVector, Iterable<Object> {
 		incCapacity();
 		System.arraycopy(this.data, pos, this.data, pos + 1, this.dataCount - pos);
 		this.data[pos] = o;
+		this.dataCount++;
 	}
 
 	@Override
 	public void remove(int index) {
-		// TODO Auto-generated method stub
-
+		int numMoved = this.dataCount - index - 1;
+		System.arraycopy(this.data, index + 1, this.data, index, numMoved);
+		this.data[--this.dataCount] = null;
 	}
 
 	@Override
 	public Object get(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		if(index >= this.dataCount)
+			throw new IllegalArgumentException("Index " + index + " out of range.");
+		return this.data[index];
 	}
 
 	@Override
