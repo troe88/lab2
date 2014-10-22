@@ -100,7 +100,11 @@ public class Vector implements IVector, Iterable<Object> {
 	@Override
 	public int indexOf(Object o) {
 		// TODO Auto-generated method stub
-		return 0;
+		for (int i = 0; i < this.data.length; i++) {
+			if(data[i].equals(o))
+				return i;
+		}
+		return -1;
 	}
 
 }
